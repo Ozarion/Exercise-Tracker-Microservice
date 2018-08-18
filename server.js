@@ -18,6 +18,7 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html')
 });
 
+// Helper function to validate username according to rules set by us
 const validateUser = (text) => /^[a-zA-Z_][a-zA-Z0-9\s.\-_$@*!]*$/.test(text);
 
 // Schema
@@ -47,7 +48,7 @@ app.post('/api/exercise/new-user', (req, res) => {
   });
 });
 
-// Insert New Exercise data into given User
+// Insert New Exercise data into given User's Exercise array
 app.post('/api/exercise/add', (req, res) => {
   if (!validateUser(req.userId)) {
     return res.json({"ERROR" : "Invalid Username"});
@@ -73,7 +74,7 @@ app.post('/api/exercise/add', (req, res) => {
       "exercise" : exercise
     }
   };
-  // Fuckin Magic
+  // Supply query and queryOp and execute the update
   User.findOneAndUpdate(query, queryOp).exec((err, doc) => {
     if (err) {
       return res.json(err);
